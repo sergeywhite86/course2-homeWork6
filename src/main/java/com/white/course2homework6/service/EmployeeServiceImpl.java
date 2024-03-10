@@ -21,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee add(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
         if (repository.findAll().size() >= repository.getMaxDBLength()) throw new ArrayIsFull();
-        if (repository.findAll().contains(new Employee(firstName, lastName))) throw new EmployeeAlreadyAdded();
+        if (repository.findAll().contains(employee)) throw new EmployeeAlreadyAdded();
         repository.add(firstName, lastName);
         return employee;
     }
@@ -29,8 +29,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee delete(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (repository.findAll().contains(employee)) throw new EmployeeAlreadyAdded();
-        repository.delete(firstName, lastName);
+        if (repository.findAll().contains(employee)) repository.delete(firstName, lastName);
+        else throw new EmployeeNotFound();
         return employee;
     }
 
